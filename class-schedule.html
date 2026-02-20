@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule - GYMFIT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .schedule-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .schedule-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .schedule-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .schedule-header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .schedule-nav {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .day-btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .day-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .day-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .schedule-content {
+            padding: 40px;
+        }
+        
+        .day-schedule {
+            display: none;
+        }
+        
+        .day-schedule.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .class-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .class-time {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .class-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .class-instructor {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .class-duration {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .class-level {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .beginner { background: #28a745; }
+        .intermediate { background: #ffc107; color: #333; }
+        .advanced { background: #dc3545; }
+        .all-levels { background: #17a2b8; }
+        
+        .class-description {
+            color: #666;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+        
+        .book-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.3s;
+            font-weight: 600;
+        }
+        
+        .book-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 40px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #555;
+        }
+        
+        .filter-section {
+            padding: 0 40px 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+        
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .schedule-nav {
+                flex-wrap: wrap;
+            }
+            
+            .day-btn {
+                margin: 5px;
+                font-size: 0.9em;
+            }
+            
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="schedule-container">
+        <div class="schedule-header">
+            <h1>Class Schedule</h1>
+            <p>Join our group fitness classes and transform your workout routine</p>
+        </div>
+        
+        <div class="schedule-nav">
+            <button class="day-btn active" onclick="showDay('monday')">Monday</button>
+            <button class="day-btn" onclick="showDay('tuesday')">Tuesday</button>
+            <button class="day-btn" onclick="showDay('wednesday')">Wednesday</button>
+            <button class="day-btn" onclick="showDay('thursday')">Thursday</button>
+            <button class="day-btn" onclick="showDay('friday')">Friday</button>
+            <button class="day-btn" onclick="showDay('saturday')">Saturday</button>
+            <button class="day-btn" onclick="showDay('sunday')">Sunday</button>
+        </div>
+        
+        <div class="filter-section">
+            <div class="filter-group">
+                <span class="filter-label">Filter by level:</span>
+                <button class="filter-btn active" onclick="filterClasses('all')">All Levels</button>
+                <button class="filter-btn" onclick="filterClasses('beginner')">Beginner</button>
+                <button class="filter-btn" onclick="filterClasses('intermediate')">Intermediate</button>
+                <button class="filter-btn" onclick="filterClasses('advanced')">Advanced</button>
+            </div>
+        </div>
+        
+        <div class="schedule-content">
+            <!-- Monday Schedule -->
+            <div id="monday" class="day-schedule active">
+                <h2>Monday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">6:00 AM - 7:00 AM</div>
+                        <div class="class-name">Morning Yoga Flow</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Start your week with gentle yoga poses and breathing exercises to energize your body and mind.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">7:30 AM - 8:30 AM</div>
+                        <div class="class-name">HIIT Training</div>
+                        <div class="class-instructor">Instructor: Rohit Sharma</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            High-intensity interval training to boost metabolism and build strength.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">5:30 PM - 6:30 PM</div>
+                        <div class="class-name">Strength Training</div>
+                        <div class="class-instructor">Instructor: Arjun Kumar</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Build muscle and increase strength with guided weight training exercises.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="advanced">
+                        <div class="class-time">7:00 PM - 8:00 PM</div>
+                        <div class="class-name">CrossFit Challenge</div>
+                        <div class="class-instructor">Instructor: Deepika Rao</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level advanced">Advanced</span>
+                        <div class="class-description">
+                            Intense functional fitness workout combining cardio, gymnastics, and weightlifting.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tuesday Schedule -->
+            <div id="tuesday" class="day-schedule">
+                <h2>Tuesday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">6:00 AM - 7:00 AM</div>
+                        <div class="class-name">Pilates Basics</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Core strengthening exercises focusing on posture, flexibility, and body awareness.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">12:00 PM - 1:00 PM</div>
+                        <div class="class-name">Lunchtime Cardio</div>
+                        <div class="class-instructor">Instructor: Deepika Rao</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            Quick and effective cardio workout perfect for your lunch break.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">6:00 PM - 7:00 PM</div>
+                        <div class="class-name">Boxing Fitness</div>
+                        <div class="class-instructor">Instructor: Arjun Kumar</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Learn boxing techniques while getting a full-body cardio workout.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wednesday Schedule -->
+            <div id="wednesday" class="day-schedule">
+                <h2>Wednesday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">6:00 AM - 7:00 AM</div>
+                        <div class="class-name">Spinning Class</div>
+                        <div class="class-instructor">Instructor: Rohit Sharma</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            High-energy indoor cycling workout with music and motivation.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">10:00 AM - 11:00 AM</div>
+                        <div class="class-name">Gentle Stretching</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Relaxing stretching session to improve flexibility and reduce stress.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="advanced">
+                        <div class="class-time">7:00 PM - 8:30 PM</div>
+                        <div class="class-name">Powerlifting</div>
+                        <div class="class-instructor">Instructor: Arjun Kumar</div>
+                        <div class="class-duration">90 minutes</div>
+                        <span class="class-level advanced">Advanced</span>
+                        <div class="class-description">
+                            Advanced strength training focusing on squats, deadlifts, and bench press.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thursday Schedule -->
+            <div id="thursday" class="day-schedule">
+                <h2>Thursday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">6:00 AM - 7:00 AM</div>
+                        <div class="class-name">Bootcamp</div>
+                        <div class="class-instructor">Instructor: Deepika Rao</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Military-style workout combining cardio, strength, and teamwork exercises.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">5:30 PM - 6:30 PM</div>
+                        <div class="class-name">Dance Fitness</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            Fun dance workout combining various dance styles with cardio exercises.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">7:00 PM - 8:00 PM</div>
+                        <div class="class-name">Meditation & Mindfulness</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Guided meditation and mindfulness practices to reduce stress and improve focus.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Friday Schedule -->
+            <div id="friday" class="day-schedule">
+                <h2>Friday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">6:00 AM - 7:00 AM</div>
+                        <div class="class-name">Circuit Training</div>
+                        <div class="class-instructor">Instructor: Rohit Sharma</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            Fast-paced workout moving through different exercise stations.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">12:00 PM - 1:00 PM</div>
+                        <div class="class-name">Core Blast</div>
+                        <div class="class-instructor">Instructor: Deepika Rao</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Intense core workout focusing on abs, obliques, and lower back.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="advanced">
+                        <div class="class-time">6:00 PM - 7:30 PM</div>
+                        <div class="class-name">Athletic Conditioning</div>
+                        <div class="class-instructor">Instructor: Arjun Kumar</div>
+                        <div class="class-duration">90 minutes</div>
+                        <span class="class-level advanced">Advanced</span>
+                        <div class="class-description">
+                            Sport-specific training to improve speed, agility, and power.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Saturday Schedule -->
+            <div id="saturday" class="day-schedule">
+                <h2>Saturday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">8:00 AM - 9:00 AM</div>
+                        <div class="class-name">Weekend Warrior</div>
+                        <div class="class-instructor">Instructor: Rohit Sharma</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Full-body workout to kickstart your weekend with energy.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">10:00 AM - 11:00 AM</div>
+                        <div class="class-name">Family Fitness</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Family-friendly workout suitable for all ages and fitness levels.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="intermediate">
+                        <div class="class-time">11:30 AM - 1:00 PM</div>
+                        <div class="class-name">Yoga Workshop</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">90 minutes</div>
+                        <span class="class-level intermediate">Intermediate</span>
+                        <div class="class-description">
+                            Extended yoga session with advanced poses and deep relaxation.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sunday Schedule -->
+            <div id="sunday" class="day-schedule">
+                <h2>Sunday Classes</h2>
+                <div class="class-grid">
+                    <div class="class-card" data-level="beginner">
+                        <div class="class-time">9:00 AM - 10:00 AM</div>
+                        <div class="class-name">Restorative Yoga</div>
+                        <div class="class-instructor">Instructor: Priya Patel</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level beginner">Beginner</span>
+                        <div class="class-description">
+                            Gentle, relaxing yoga practice to restore and rejuvenate your body.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                    
+                    <div class="class-card" data-level="all-levels">
+                        <div class="class-time">10:30 AM - 11:30 AM</div>
+                        <div class="class-name">Stretch & Recovery</div>
+                        <div class="class-instructor">Instructor: Deepika Rao</div>
+                        <div class="class-duration">60 minutes</div>
+                        <span class="class-level all-levels">All Levels</span>
+                        <div class="class-description">
+                            Focus on flexibility and muscle recovery to prepare for the week ahead.
+                        </div>
+                        <button class="book-btn">Book Class</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="Gym.html" class="back-btn">← Back to Gym</a>
+    </div>
+    
+    <script>
+        function showDay(day) {
+            // Hide all day schedules
+            const allSchedules = document.querySelectorAll('.day-schedule');
+            allSchedules.forEach(schedule => {
+                schedule.classList.remove('active');
+            });
+            
+            // Remove active class from all day buttons
+            const allButtons = document.querySelectorAll('.day-btn');
+            allButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected day schedule
+            document.getElementById(day).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function filterClasses(level) {
+            // Remove active class from all filter buttons
+            const allFilterButtons = document.querySelectorAll('.filter-btn');
+            allFilterButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked filter button
+            event.target.classList.add('active');
+            
+            // Get all class cards in the active day schedule
+            const activeSchedule = document.querySelector('.day-schedule.active');
+            const classCards = activeSchedule.querySelectorAll('.class-card');
+            
+            classCards.forEach(card => {
+                if (level === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (card.dataset.level === level) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // Add booking functionality
+        document.querySelectorAll('.book-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const classCard = this.closest('.class-card');
+                const className = classCard.querySelector('.class-name').textContent;
+                const classTime = classCard.querySelector('.class-time').textContent;
+                
+                if (this.textContent === 'Book Class') {
+                    this.textContent = 'Booked ✓';
+                    this.style.background = '#28a745';
+                    alert(`Successfully booked: ${className} at ${classTime}`);
+                } else {
+                    this.textContent = 'Book Class';
+                    this.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    alert(`Booking cancelled for: ${className} at ${classTime}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

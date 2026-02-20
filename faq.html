@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - GYMFIT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .faq-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .faq-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .faq-header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .faq-content {
+            padding: 40px;
+        }
+        
+        .faq-category {
+            margin-bottom: 40px;
+        }
+        
+        .category-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #333;
+            transition: background 0.3s;
+        }
+        
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+        
+        .faq-question.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .faq-toggle {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+        
+        .faq-question.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: white;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .faq-answer.show {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 40px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #555;
+        }
+        
+        .contact-prompt {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            margin: 20px 40px;
+            border-radius: 10px;
+        }
+        
+        .contact-prompt h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .contact-prompt p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .faq-header {
+                padding: 30px 20px;
+            }
+            
+            .faq-content {
+                padding: 20px;
+            }
+            
+            .faq-header h1 {
+                font-size: 2em;
+            }
+            
+            .category-title {
+                font-size: 1.3em;
+            }
+            
+            .faq-question {
+                padding: 15px;
+                font-size: 0.95em;
+            }
+            
+            .faq-answer {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <div class="faq-header">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions about GYMFIT</p>
+        </div>
+        
+        <div class="faq-content">
+            <!-- Membership Questions -->
+            <div class="faq-category">
+                <h2 class="category-title">Membership & Pricing</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What membership plans are available?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer three membership plans:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li><strong>Basic Plan (₹999/month):</strong> Gym access, cardio training, weight training</li>
+                            <li><strong>Standard Plan (₹1,999/month):</strong> All basic features + weight loss program + nutrition guide</li>
+                            <li><strong>Premium Plan (₹3,999/month):</strong> All features + personal trainer + full diet plan + weekly progress checks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I change my membership plan?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! You can upgrade or downgrade your membership plan at any time. Changes take effect at the start of your next billing cycle. Simply visit our front desk or contact our membership team.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is there a joining fee?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We occasionally offer special promotions with no joining fee. Standard joining fee is ₹999, which includes your initial fitness assessment and gym orientation. Ask about our current promotions!</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I freeze my membership?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can freeze your membership for up to 3 months per year for medical reasons, travel, or other valid circumstances. A nominal freeze fee of ₹299 per month applies.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Facilities & Equipment -->
+            <div class="faq-category">
+                <h2 class="category-title">Facilities & Equipment</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What equipment is available?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our gym is fully equipped with:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Cardio machines: treadmills, ellipticals, stationary bikes, rowing machines</li>
+                            <li>Strength training: free weights, squat racks, bench presses</li>
+                            <li>Resistance machines for all muscle groups</li>
+                            <li>Functional training area with battle ropes, kettlebells, TRX</li>
+                            <li>Yoga and stretching area with mats and props</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What are the gym hours?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We're open 7 days a week:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Monday - Friday: 5:00 AM - 10:00 PM</li>
+                            <li>Saturday: 6:00 AM - 9:00 PM</li>
+                            <li>Sunday: 7:00 AM - 8:00 PM</li>
+                        </ul>
+                        <p>Holiday hours may vary - check our notice board or app for updates.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is parking available?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we have dedicated parking for our members with 50+ spaces available. Parking is free for all members during gym hours. Additional street parking is also available nearby.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Are there changing rooms and showers?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! We have clean, modern changing rooms with lockers, showers, and complimentary toiletries. Towel service is available for premium members.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Training & Classes -->
+            <div class="faq-category">
+                <h2 class="category-title">Training & Classes</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do I need to book classes in advance?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>While some classes accept walk-ins, we recommend booking in advance to secure your spot, especially for popular classes like HIIT and spinning. You can book through our mobile app or at the front desk.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What types of group classes are offered?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer a variety of group fitness classes:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Yoga and Pilates</li>
+                            <li>HIIT and Circuit Training</li>
+                            <li>Spinning and Cardio</li>
+                            <li>Strength and Conditioning</li>
+                            <li>Dance Fitness</li>
+                            <li>Boxing and Martial Arts</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I get started with personal training?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Getting started is easy! Schedule a free consultation with one of our certified trainers. They'll assess your fitness level, discuss your goals, and create a personalized training plan. Personal training sessions are available in packages of 5, 10, or 20 sessions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Are beginners welcome in all classes?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! We offer classes for all fitness levels. Each class description indicates the difficulty level (Beginner, Intermediate, Advanced, or All Levels). Our instructors are trained to provide modifications for different fitness levels.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Health & Safety -->
+            <div class="faq-category">
+                <h2 class="category-title">Health & Safety</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do I need a medical clearance?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you have pre-existing medical conditions, are over 65, or have been inactive for more than 6 months, we recommend consulting your doctor before starting any exercise program. Our trainers can also help assess your readiness for exercise.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How is the gym cleaned and maintained?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We maintain high standards of cleanliness with:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Daily professional cleaning</li>
+                            <li>Hand sanitizer stations throughout the gym</li>
+                            <li>Disinfectant wipes for equipment</li>
+                            <li>Regular equipment maintenance checks</li>
+                            <li>Clean towels available for all members</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What should I bring to the gym?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Bring comfortable workout clothes, proper athletic shoes, a water bottle, and a lock for the locker. We provide towels, water fountains, and all necessary equipment. Don't forget your membership card!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-prompt">
+            <h3>Still have questions?</h3>
+            <p>Our team is here to help! Contact us for more information.</p>
+            <a href="Gym.html#contact" class="contact-btn">Contact Us</a>
+        </div>
+        
+        <a href="Gym.html" class="back-btn">← Back to Gym</a>
+    </div>
+    
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isActive = element.classList.contains('active');
+            
+            // Close all other FAQs in the same category
+            const category = element.closest('.faq-category');
+            const allQuestions = category.querySelectorAll('.faq-question');
+            const allAnswers = category.querySelectorAll('.faq-answer');
+            
+            allQuestions.forEach(q => q.classList.remove('active'));
+            allAnswers.forEach(a => a.classList.remove('show'));
+            
+            // Toggle current FAQ
+            if (!isActive) {
+                element.classList.add('active');
+                answer.classList.add('show');
+            }
+        }
+        
+        // Open first FAQ in each category by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.faq-category');
+            categories.forEach(category => {
+                const firstQuestion = category.querySelector('.faq-question');
+                if (firstQuestion) {
+                    toggleFAQ(firstQuestion);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
